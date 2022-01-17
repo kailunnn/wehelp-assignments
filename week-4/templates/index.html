@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首頁</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+</head>
+<body>
+    <p class="title">歡迎光臨，請輸入帳號密碼</p>
+    <form action="/signin" class="userSignIn" method="post">
+        <h1>登入系統</h1>
+        <div class="textInput">
+            <label for="userAccount">帳號</label>
+            <input type="text" name="acount" placeholder="請輸入帳號">
+        </div>
+        <div class="textInput">
+            <label for="userPassword">密碼</label>
+            <input type="password" name="password" placeholder="請輸入密碼">
+        </div>
+        <button>登入</button>
+    </form>
+</body>
+</html>
