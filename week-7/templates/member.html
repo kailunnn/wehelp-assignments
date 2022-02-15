@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/member.css')}}">
+</head>
+<body>
+    <h1>歡迎光臨，這是會員頁</h1>
+    <p class="successHint">{{name}}恭喜您，成功登入系統</p>
+    <a href="/signout">登出系統</a>
+    <div class="userInput">
+        <h2>查詢會員姓名</h2>
+        <input type="text" name="username" class="inputUser">
+        <button class="search">查詢</button>
+        <p class="searchAccount"></p>
+    </div>
+    <div class="userInput">
+        <h2>更新我的姓名</h2>
+        <input type="text" name="name" class="inputName">
+        <button class="changeBtn">更新</button>
+        <p class="changeMsg"></p>
+    </div>
+
+    <script>
+        searchBtn = document.querySelector(".search");
+        inputUser = document.querySelector(".inputUser");
+        showInfo = document.querySelector(".searchAccount");
+        changeBtn = document.querySelector(".changeBtn");
+        inputName = document.querySelector(".inputName");
+        changeMsg = document.querySelector(".changeMsg");
+        // 監聽搜尋使用者帳號按鈕
+        searchBtn.addEventListener("click",function(){
+            username = inputUser.value;
+            url = "/api/members?username=" + username
+            fetch(url)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(result){
+                setInfo(result)
+            })
+        });
+        // 印出使用者帳號與姓名
+        function setInfo(result){
+            console.log(result)
+            if(result.data == null){
+                showInfo.innerHTML = "無此會員資料"
+            }
+            else{
+                resultName = result.data.name;
+                resultUsername = result.data.username;
+                showInfo.innerHTML = `${resultName}(${resultUsername})`;
+            }
+        };
+        // 監聽更改會員姓名按鈕
+        changeBtn.addEventListener('click', function(){
+            newName = inputName.value;
+            // {"name":"新的使用者姓名"}
+            data = {"name":newName}
+            url = "/api/member"
+            fetch(url,{
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data =>{
+                result = Object.keys(data)[0];
+                setMsg(result)
+            })
+            .catch(error => console.error(error))
+        })
+        function setMsg(result){
+            if(result == "ok"){
+                changeMsg.innerHTML = "更新成功";
+            }
+            else{
+                changeMsg.innerHTML = "更新失敗";
+            }
+        }
+    </script>
+</body>
+</html>
